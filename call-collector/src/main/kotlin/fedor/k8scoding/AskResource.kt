@@ -1,0 +1,29 @@
+package fedor.k8scoding
+
+import fedor.k8scoding.service.AppService
+import javax.ws.rs.GET
+import javax.ws.rs.POST
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
+
+@Path("/")
+class AskResource(
+    val appService: AppService,
+
+    ) {
+
+    @GET
+    @Path("/ask")
+    @Produces(MediaType.TEXT_PLAIN)
+    fun ask() = appService.message
+
+    @POST
+    @Path("/call")
+    fun call(body: String): Response {
+        println("body: $body")
+        appService.callRequestEmitter.send(body)
+        return Response.ok().build()
+    }
+}
